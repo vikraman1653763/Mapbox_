@@ -1,0 +1,83 @@
+{% extends 'lbody.html' %}
+
+{% block title %} Update - Nevar-Systems {% endblock %}
+
+
+{% block login %}
+
+     
+          <div class="form-group">
+              <form method="POST" class="needs-validation form" id="form" novalidate="" autocomplete="off">
+                {{RegisterForm.hidden_tag()}}   
+                <div class="image-container">
+                  <img class='logo' src="/static/images/nevarblack.png">
+
+              </div>
+              <p class="title">Update</p>
+
+                <div class="flex input-control">
+                    <label >
+                      
+                      {{RegisterForm.username( type="text" ,class="form-control input", id=username, value=user.username ,required="", autocomplete="username", placeholder="", required="")}}
+                      <span>Firstname</span>
+                    </label>
+                </div>
+                
+
+                <div class=" flex input-control">
+                    <label >
+              
+                      {{RegisterForm.email(id="form2Example18", class="form-control input " , value=user.email, placeholder="", required="")}}
+                      <span>Email</span>
+                    </label>
+                    <div class="invalid-feedback">
+                          Email is invalid
+                    </div>
+                </div>
+                            
+               
+                    <div class=" flex input-control">
+                      <label >
+
+                          {{RegisterForm.password( id="form2Example28" , class="input", placeholder="", required="" )}}
+                          <span>Password</span>
+                      </label>
+                    </div>
+                    
+                <div class="mb-3">
+                  <div class=" flex input-control">
+                    <label>
+
+                      {{RegisterForm.password2( id="form2Example28" , class="input", placeholder="", required="" )}}
+                      <span>confirm</span>
+                    </label>
+                  </div>
+                    {% for error in RegisterForm.password.errors %}
+                    <span style="color:red;">
+          
+                        {{error}}
+                    </span>
+                    {% endfor %}
+
+                </div>
+  
+                <div style="display: flex; justify-content:center;">
+                  <div class="form-check"> 
+                    
+                     {{RegisterForm.submit(class="btn btn-outline-primary " , value="Update",id="sign" ,class="button")}} 
+
+                  </div>
+                </div>
+              </form>
+            </div>
+          
+          </div>
+          
+        
+  </section>
+<style>
+  img{
+    
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Display a globe on a webpage</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+
+<script src="{{ url_for('static', filename='centreLatLong.js') }}"></script>
+
+
+</head>
+
+<body>
+    <div id="sidebar">
+        <h2 class="titleName">Layers</h2>
+        <div id="layerToggle">
+            {% for file in files %}
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="dbLayer{{ file.id }}" class="layerToggleCheckbox" checked onchange="toggleLayerVisibility('{{ file.name }}', this.checked)">
+                <label for="dbLayer{{ file.id }}" class="layerToggleLabel">{{ file.name }}</label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div id="map"></div>
+    <pre id="info"></pre>
+    <button class='feature' id="toggleFeatureInfo">ℹ️</button>
+    <div id="menu" class="map-menu">
+        <label for="baseToggle">Select Map Style:</label>
+        <select id="baseToggle">
+            <option value="satellite-v9">Satellite</option>
+            <option value="light-v11">Light</option>
+            <option value="dark-v11">Dark</option>
+        </select>
+        
+    </div>
+    <script>
+        const files = {{ files | tojson }};
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZ3Zpa3JhbWFuIiwiYSI6ImNsdXFpNGxrZTJiZ3gyamxpcXg1MTZicWwifQ.rnrsW4JGmWMdLH_QAMz3oQ';
+        const centerCoordinates=centreLatLong({{ files[0].data | tojson }});
+        // Define base layer separately
+        const baseLayer = 'mapbox://styles/mapbox/satellite-v9';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: baseLayer,
+            zoom: 16,
+            center: centerCoordinates,
+            projection: 'globe'
+        });
+
+        // Add database layers
+        function renderLayer(files){
+            {% for layer in files %}
+            
+            const Data{{ layer.name }} = {{ layer.data | tojson }};
+            map.addSource('{{ layer.name }}', {
+                type: 'geojson',
+                data: Data{{ layer.name }}
+            });
+            var layerType = 'fill'; // Default to fill
+            var paintProperties = {}; // Define paintProperties object
+                if (Data{{ layer.name }}.features.length > 0) {
+                    const geometryType = Data{{ layer.name }}.features[0].geometry.type.toLowerCase();
+                    const randomColor = [Math.random() * 255, Math.random() * 255, Math.random() * 255];
+                    if (geometryType === 'point') {
+                        layerType = 'circle'; 
+                        paintProperties = {
+                            'circle-radius': 3,
+                            'circle-color': '{{layer.color}}'
+                        };
+                    } else if (geometryType === 'polygon') {
+                        paintProperties = {
+                            'fill-color': '{{layer.color}}'
+                        };
+                    } else if (geometryType === 'multilinestring') {
+                        layerType = 'line';
+                        paintProperties = {
+                            'line-width': 2,
+                            'line-color': '{{layer.color}}'
+                        };
+                    }
+                }
+                map.addLayer({
+                    id: '{{ layer.name }}',
+                    type: layerType,
+                    source: '{{ layer.name }}',
+                    paint: paintProperties 
+                });
+            {% endfor %}
+        }    
+        function toggleLayerVisibility(layerName, isVisible) {
+            if (isVisible) {
+                map.setLayoutProperty(layerName, 'visibility', 'visible');
+            } else {
+                map.setLayoutProperty(layerName, 'visibility', 'none');
+            }
+        }
+        map.on('style.load', () => {
+            map.setFog({});
+            renderLayer(files);
+        });  
+             // Add base layer toggle functionality
+        document.getElementById('baseToggle').addEventListener('change', function() {
+            const selectedStyle = this.value;
+            map.setStyle('mapbox://styles/mapbox/' + selectedStyle);
+        });
+        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        const layerList = document.getElementById('menu');
+        const inputs = layerList.getElementsByTagName('input');
+        map.on('mousemove', (e) => {
+            document.getElementById('info').innerHTML =
+                // Extracting lng and lat from e.lngLat object
+                "<b>Longitude:</b> " + e.lngLat.lng.toFixed(6) +
+                " " +
+                "<b>Latitude: </b>" + e.lngLat.lat.toFixed(6);
+        });
+        
+    </script>
+    
+</body>
+</html>

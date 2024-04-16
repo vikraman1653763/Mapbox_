@@ -1,0 +1,46 @@
+<!-- login.html -->
+
+
+{% extends 'lbody.html' %}
+<head>
+    <title>Welcome</title>
+    
+</head>
+
+{% block login %}
+
+<div class="form-group">
+<form class="form" id="form" method="POST" action="/login">
+  {{LoginForm.hidden_tag()}} 
+    <div class="image-container">
+        <img class='logo' src="static\images\nevarblack.png">
+    </div>
+    <p class="title">Welcome</p>
+    
+    <div class="flex input-control">
+        <label>
+            
+            {{ LoginForm.email(id="email",class="input",type="email", placeholder="",required="",autocomplete="email") }}
+
+            <span>Email</span>
+        </label>
+    </div>
+
+    <div class="flex input-control">
+        <label>
+            {{ LoginForm.password(id="password",class="input",type="password", placeholder="",required="",autocomplete="password") }}
+
+            <span>Password</span>
+        </label>
+    </div>
+
+    <div class="signin-container" >
+        {{LoginForm.submit(id="sign",class="button",type="submit")}}
+    </div>
+
+    
+</form>
+</div>
+
+
+{% endblock %}

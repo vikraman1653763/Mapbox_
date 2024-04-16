@@ -1,0 +1,67 @@
+
+{% extends 'lbody.html' %}
+
+{% block title %} Add User - Nevar-Systems {% endblock %}
+
+
+{% block login %}
+
+<div class="form-group">
+<form class="form " id="form">
+  <div class="image-container">
+  <img class='logo' src="static\images\nevarblack.png">
+</div>
+  <p class="title">Register </p>
+  <p class="message">Signup now and get full access to our app. </p>
+  <div class=" name flex input-control">
+      <label>
+          <input id="username" class="input" type="text" placeholder="" required="" autocomplete="username">
+          <span>Firstname</span>
+      </label>
+      
+  
+
+      <div class=" flex input-control">
+      <label>
+          <input id="lastname" class="input" type="text" placeholder="" required="" autocomplete="lastname">
+          <span>Lastname</span>
+      </label>
+      
+   </div>
+</div>
+  <div class="flex input-control">
+      <label>
+          <input id="email" class="input" type="email" placeholder="" required="" autocomplete="email">
+          <span>Email</span>
+      </label>
+      
+  </div>
+
+  <div class="flex input-control">
+      <label>
+          <input id="password" class="input" type="password" placeholder="" required="" autocomplete="password1">
+          <span>Password</span>
+      </label>
+      
+  </div>
+
+  <div class="flex input-control">
+      <label>
+          <input id="password2" class="input" type="password" placeholder="" required="" autocomplete="password2">
+          <span>Confirm password</span>
+      </label>
+      
+  </div>
+<div class="signin-container">
+  <button id="sign" class="button" type="button" onclick="sendOTP()">Sign Up</button>
+</div>
+
+
+
+ 
+  
+</form>
+</div>
+<script src="{{ url_for('static', filename='js/form.js') }}"></script>
+<script src="{{ url_for('static', filename='js/otp.js') }}"></script>
+{% endblock %}

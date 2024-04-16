@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %} Users - Nevar-Systems {% endblock %}
+
+
+
+{% block body %}
+
+
+
+
+    {% for user in users %}
+
+        {% if user.role != "admin" %}
+
+            <div class="card bg-light" style="margin:1%; padding: 0.5%; width:calc(100% - 2%); ">
+
+                <h5 class="card-header" >{{user.username}}</h5>
+                <div class="card-body">
+                    
+                    <h5 class="card-title"style="margin:0.5%; padding: 0.5%; padding-bottom:1%">{{user.email}}</h5>
+                    <h6 style="margin-left:0.5%; padding-left: 0.5%; padding-bottom:1%"> No.of.Projects : {{user.project|length}}</h6>
+                    
+
+                    <div  style="display: flex;justify-content: flex-end;gap: 1rem;">
+                        
+                                           
+                        <button class="button btdash">
+                            <a href="{{url_for('status' , id=user.id)}}">Dashboard</a> 
+                        </button>
+                        <button class="button btupdate">
+                            <a href="{{url_for('update' , id=user.id)}}">update user</a>                    
+                        </button>
+                        <button class="button btdel">
+                            <a href="{{ url_for('delete', id=user.id) }}"  data-confirm="Are you sure you want to delete this user?">Delete</a>
+                        </button>
+                    </div>
+                        
+                </div>
+
+            </div>
+            
+        {% endif %}  
+          
+    {% endfor %}
+    <script>
+    
+    </script>
+    <style>
+        .card-header{
+            background:#eaa0a2;
+        }
+        .btdash a {
+            text-decoration: none; 
+            color: #0eb2ed;
+        }
+        .btupdate a {
+            text-decoration: none; 
+            color: #d2b005;
+        }
+        .btdel a {
+            text-decoration: none; 
+            color: #ff0000da;
+        }
+        .button {
+            width: 10em;
+            position: relative;
+            height: 3.5em;
+            outline: none;
+            background-color: transparent;
+            transition: 1s;
+            border-radius: 53px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+          }
+          
+          .button::after {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 3%;
+            width: 95%;
+            height: 40%;
+            background-color: #f8f8f8;
+            transition: 0.5s;
+            transform-origin: center;
+          }
+          
+          .button::before {
+            content: "";
+            transform-origin: center;
+            position: absolute;
+            top: 80%;
+            left: 3%;
+            width: 95%;
+            height: 40%;
+            background-color: #f8f8f8;
+            transition: 0.5s;
+          }
+          
+          .button:hover::before, button:hover::after {
+            transform: scale(0)
+          }
+          
+    
+          .btdel{
+            border: 3px ridge #ff0000da;
+          }
+          .btdel:hover{
+            box-shadow: inset 0px 0px 25px #ff0000da;
+          }
+          .btupdate{
+            border: 3px ridge #d2b005;
+          }
+          .btupdate:hover{
+            box-shadow: inset 0px 0px 25px #d2b005;
+          }
+          .btdash{
+            border: 3px ridge #0eb2ed;
+          }
+          .btdash:hover{
+            box-shadow: inset 0px 0px 25px #0eb2ed;
+          }
+    </style>
+{% endblock %}
+

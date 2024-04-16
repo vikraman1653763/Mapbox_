@@ -1,0 +1,197 @@
+
+
+
+.popup {
+    
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    backdrop-filter: blur(1.6px);
+    transition: 500ms ease-in-out;
+    transform: scale(1.05);
+
+}
+
+.popup-content {
+    background-color: #c7c6c6;
+    margin: 15% auto;
+    padding: 10px;
+    border: 1px solid #0bebc6;
+    width: 30%; /* Adjust the width as needed */
+    border-radius: 20px;
+}
+.popup-p {
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Rubik', sans-serif;
+    word-wrap: break-word;
+}
+
+
+    .popup-close {
+        color: black;
+        float: right;
+        font-size: 30px;
+        font-weight: bold;
+        border-radius: 50px;
+        padding: 0px;
+        margin: 0px;
+       
+    }
+
+    .popup-close:hover,
+    .popup-close:focus {
+        color: #0bebc6;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .popup-in {
+        display: flex;
+        flex-direction: column; /* Adjust layout to stack items vertically */
+        align-items: center; /* Center items horizontally */
+        justify-content: center; /* Center items vertically */
+        padding: 5px;
+    }
+
+    .popup-input,
+    .popup-button {
+        width: 100%; /* Set width to 100% of parent container */
+        margin-bottom: 10px; /* Add spacing between input and button */
+    }
+
+    .popup-input {
+        border: none;
+        outline: none;
+        border-radius: 15px;
+        padding: 1em;
+        background-color: #ccc;
+        box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+        transition: 500ms ease-in-out;
+    }
+
+    .popup-input:focus {
+        background-color: rgb(224, 222, 222);
+        transform: scale(1.05);
+        box-shadow: 13px 13px 50px #969696, -13px -13px 50px #dddbdb;
+    }
+
+    /* From uiverse.io by @Ali-Tahmazi99 */
+    .popup-button {
+        display: inline-block;
+        width: 100px;
+        height: 42px;
+        border: none;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.5s ease-in;
+        z-index: 1;
+        border-radius: 43px;
+        background-color: #c7c6c6;
+        box-shadow:  2px 5px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .popup-button::before,
+    .popup-button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 0;
+        height: 100%;
+        transform: skew(40deg);
+        transition: all 0.5s;
+        overflow: hidden;
+        z-index: -1;
+    }
+
+    .popup-button::before {
+        left: -5px;
+        background: #0bebc6;
+    }
+
+    .popup-button::after {
+        right: -5px;
+        background: #0bebc6;
+    }
+
+    .popup-button:hover::before,
+    .popup-button:hover::after {
+        width: 58%;
+    }
+
+    .popup-button:hover span {
+        color: white;
+        transition: 0.3s;
+    }
+
+    .popup-button span {
+        color: black;
+        font-size: 18px;
+        transition: all 0.3s ease-in;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .popup-content {
+            width: 90%;
+          
+        }
+        .popup-p {
+            font-size: 1px !important; /* Decrease font size for smaller screens */
+        }
+        .popup-input {
+            padding: 0.8em; /* Adjust input padding for smaller screens */
+        }
+        .popup-button {
+            width: 80px; /* Adjust button width for smaller screens */
+        }
+    }
+    
+    @media only screen and (max-width: 400px) {
+        .popup-content {
+            width: 90%; /* Adjust width for even smaller screens */
+        }
+        .popup-p {
+            font-size: 10px !important; /* Further decrease font size for even smaller screens */
+        }
+        .popup-input {
+            padding: 0.6em; /* Further adjust input padding for even smaller screens */
+        }
+        .popup-button {
+            width: 70px; /* Further adjust button width for even smaller screens */
+        }
+    }
+    
+    #pointerDialog {
+        position: fixed;
+        display:none;
+        top: 10%;
+        right: 0;
+        max-width: 300px; 
+        overflow: hidden; 
+        background-color: #ccc;
+        border: 1px solid #ffffff ;
+        border-radius: 5px;
+        padding: 20px;
+        z-index: 1000;
+    }
+    
+    .pointer-close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+        color: #888;
+    }
+    
+    .pointer-info {
+        margin-top: 10px;
+    }
+    
+    .pointer-info p {
+        margin-bottom: 5px;
+    }

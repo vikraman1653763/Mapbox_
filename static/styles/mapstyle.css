@@ -1,0 +1,641 @@
+/* body{
+  overflow: hidden;
+} */
+#map {
+  position: fixed; 
+ 
+  column-width: 100vw; 
+  height: 100vh;
+  right: -15px;
+  padding: 0%;
+  z-index: 0;
+}
+
+
+.layerNames {
+  overflow-y: auto;
+  height: clamp(80vh, 91vh, 80vh);
+  background:transparent !important;
+  border-radius: 10px;
+  scrollbar-width: 20px;
+  scrollbar-color: hsla(160, 23%, 97%, 0.2) transparent !important;
+  width: clamp(200px,220px,400px);
+  
+}
+
+.layerNames::-webkit-scrollbar {
+  border-radius: 20px;
+}
+
+
+.row {
+  background: transparent;
+  flex-wrap: nowrap;
+  z-index: 5;
+  width: 500px;
+}
+.row.hidden-row {
+  transform: translateX(-200%);
+  z-index: 5;  
+  width: clamp(200px,230px,400px);
+}
+
+
+.sidebar-visible {
+  transform: translateX(-500px); 
+  z-index: 0;
+}
+
+    
+    
+h2{
+    font-weight: bold;
+    color:rgb(0, 0, 0);
+}
+
+/* check box */
+.checkbox-wrapper * {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .checkbox-wrapper input[type="checkbox"] {
+    display: none;
+  }
+  
+  .checkbox-wrapper label {
+    --size: 25px;
+    --shadow: calc(var(--size) * .07) calc(var(--size) * .1);
+    position: relative;
+    display: inline-block;
+    width: var(--size);
+    height: var(--size);
+    margin: 0 auto;
+    background-color: #4158D0;
+    /* background-image: linear-gradient(43deg, #f2f6f7 0%, #4cbdc8 0%, #06e3f7 10%); */
+      background-image: linear-gradient(45deg, #c7c6c6,#81f7fd, #f4f4f4);
+
+    border-radius: 50%;
+    box-shadow: 0 var(--shadow) #ffbeb8;
+    cursor: pointer;
+    transition: 0.2s ease transform, 0.2s ease background-color,
+        0.2s ease box-shadow;
+    overflow: hidden;
+    z-index: 1;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  
+  .checkbox-wrapper label:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    width: calc(var(--size) * .7);
+    height: calc(var(--size) * .7);
+    margin: 0 auto;
+    background-color: #fff;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    box-shadow: inset 0 var(--shadow) #a1a4a4;
+    transition: 0.2s ease width, 0.2s ease height;
+  }
+  
+  .checkbox-wrapper label:hover:before {
+    width: calc(var(--size) * .55);
+    height: calc(var(--size) * .55);
+    box-shadow: inset 0 var(--shadow) #ff9d96;
+  }
+  
+  .checkbox-wrapper label:active {
+    transform: scale(0.9);
+  }
+  
+  .checkbox-wrapper .tick_mark {
+    position: absolute;
+    top: -1px;
+    right: 0;
+    left: calc(var(--size) * -.05);
+    width: calc(var(--size) * .6);
+    height: calc(var(--size) * .6);
+    margin: 0 auto;
+    margin-left: calc(var(--size) * .14);
+    transform: rotateZ(-40deg);
+  }
+  
+  .checkbox-wrapper .tick_mark:before,
+    .checkbox-wrapper .tick_mark:after {
+    content: "";
+    position: absolute;
+    background-color: #fff;
+    border-radius: 2px;
+    opacity: 0;
+    transition: 0.2s ease transform, 0.2s ease opacity;
+  }
+  
+  .checkbox-wrapper .tick_mark:before {
+    left: 0;
+    bottom: 0;
+    width: calc(var(--size) * .1);
+    height: calc(var(--size) * .3);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.23);
+    transform: translateY(calc(var(--size) * -.68));
+  }
+  
+  .checkbox-wrapper .tick_mark:after {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(var(--size) * .1);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.23);
+    transform: translateX(calc(var(--size) * .78));
+  }
+  
+  .checkbox-wrapper input[type="checkbox"]:checked + label {
+    background-color: #4158D0;
+    background-image: #36f1c5fa;
+    box-shadow: rgba(0, 0, 0, 0.3) 10px 1px 38px, rgba(0, 0, 0, 0.22) -5px 5px 5px;
+  }
+  
+  .checkbox-wrapper input[type="checkbox"]:checked + label:before {
+    width: 0;
+    height: 0;
+  }
+  
+  .checkbox-wrapper input[type="checkbox"]:checked + label .tick_mark:before,
+    .checkbox-wrapper input[type="checkbox"]:checked + label .tick_mark:after {
+    transform: translate(0);
+    opacity: 1;
+  }
+  .checkbox-wrapper span {
+    font-size:14px;
+    color: #000;
+}
+
+
+
+.myButton {
+  z-index:3;
+  background-color: transparent;
+  border: none;
+  font-weight: 700;
+  transition: left 0.3s ease;
+}
+
+
+nav{
+  background-color: #00d0ff ;
+  backdrop-filter: blur(10px);
+}
+
+.nav-link {
+  font-size: large;
+  color: #000000;
+  font-weight: bold;
+}
+  .nav-img {
+    box-shadow: none;
+    filter: invert(0%) ;
+
+  }
+ 
+
+
+
+.clicked-image-border {
+  box-shadow: rgba(0, 0, 0, 0.3) 10px 1px 38px, rgba(0, 0, 0, 0.22) -5px 5px 5px;
+  border-radius: 20px;
+  background-image: linear-gradient(43deg, #f2f6f7 0%, #4cbdc8 0%, #06e3f7 10%);
+  background: rgb(230, 229, 229);
+
+}
+
+
+
+
+.container {
+  position: relative;
+  height: 200px;
+  width: 10px;
+  z-index: 3;
+}
+
+#homeButton {
+  position: fixed;
+  bottom: 5px;
+  left: 7px;
+  transform: translate(-20%,20%);
+  
+}
+#homeButton img{
+  width: 30px;
+  height: 30px;
+  
+}
+
+
+.tooly {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 10%; 
+  right: 1px;
+  width: 40px;
+  margin-right:3px ;
+  z-index: 3;
+  transform: translateX(0%);
+  transition: transform 0.3s ease-in-out;
+
+  border-radius: 30px;
+ 
+}
+
+.show {
+ transform: translateX(200%);
+}
+
+.btnBar{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:  rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 5px;
+  margin: 5px  4px;
+
+}
+
+.toolBtnImg{
+  height:25px;
+  border-radius: 5px;
+  width:25px;
+  padding: 2px;
+  /* box-shadow: rgba(0, 0, 0, 0.3) 10px 1px 38px, rgba(0, 0, 0, 0.22) -5px 5px 5px; */
+  left: 0%;
+  z-index: inherit;
+  background-color: #00d0ff;
+
+}
+
+.allButtonBar {
+  /* box-shadow: rgba(113, 113, 113, 0.5) 4px 4px 5px; */
+            
+  height: 91vh;
+  z-index: 1;
+  background: #ffffff;
+  
+
+  width: 70px;
+  border-top: none repeat;
+}
+
+.myButton .tooltip {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 5px);
+  transform: translateY(-50%);
+  padding: 0.3em 0.6em;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 2s cubic-bezier(0.23, 1, 0.32, 1);
+  background: hsla(191, 100%, 50%, 0.733); 
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  color: white;
+}
+
+
+
+.myButton:hover .tooltip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+  
+.toolbtn:hover .tooltip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+
+.toolbtn{
+  position: relative; 
+  margin: 0px 5px 0px 5px;
+    padding: 5px;
+
+}
+.mainbtnBar{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background: rgb(160, 159, 159); */
+  background-color: transparent;
+  border-radius: 10px 10px 30px 30px;
+  padding: 2px;
+  margin-left:10px ;
+  
+}
+.mainBtn img {
+  height:30px;
+border-radius: 10px;
+width:30px;
+}
+.mainBtn{
+  position: relative; 
+    margin: 30px;
+  
+    transition: transform 0.3s ease-in-out;
+  }
+  .mainBtn:hover{
+    transform: scale(1.2);
+    transition: transform 0.3s ease-in-out;
+    border-radius: 20px;
+      /* background-color: #f654c8; */
+}
+
+.mainBtn .maintip {
+  position: absolute;
+  top: 120%;
+  width: auto;
+  left: 50%;
+  transform: translateX(-50%) translateY(-55%);
+  opacity: 0; 
+  font-size: 14px;
+ 
+  
+}
+
+.mainBtn:hover .maintip {
+  padding: 0.3em ;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+
+.metricbar {
+  position: fixed;
+  top: 60px;
+  height: 91vh;
+  width: auto; 
+  width: clamp(210px,300px,400px); 
+  transform: translateX(-300px);
+  transition: transform 0.7s ease-in-out;
+  max-height: 100%; /* Setting maximum height to make it scrollable */
+  overflow-y: auto; /* Making it scrollable */
+  padding: 10px;
+  background: rgb(255, 255, 255);
+ 
+}
+  
+.metricbar-visible{
+  transform: translateX(57px); 
+}
+
+
+
+.metricbar div {
+  margin-bottom: 10px;
+}
+
+.metric-section {
+  margin-bottom: 20px;
+}
+
+.metric-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 150px; /* Adjust the max-height according to your needs */
+  overflow-y: auto; /* Making it scrollable */
+  padding-right: 15px; /* Adjusting for scrollbar */
+}
+/* Hide scrollbar for Firefox */
+.metric-list::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Hide scrollbar for IE, Edge and Safari */
+.metric-list {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.metric-checkbox {
+  margin-right: 10px;
+}
+
+.metric-name {
+  margin-right: auto;
+}
+
+.delmetric ,.metricDelete{
+  border: none;
+  background-color: transparent !important;
+  height:20px;
+  border-radius: 10px;
+  width:20px;
+}
+
+
+
+
+
+
+.metimg{
+  height: 20px;
+  width: 20px;
+  border: none;
+  border-radius: 0px;
+  box-shadow: none;
+}
+
+.metric-list{
+  font-size: 12px;
+}
+
+
+
+
+
+
+
+.loading-popup {
+  display: none;
+  position: fixed; /* Change to fixed position */
+  top: 0;
+  left: 0;
+  width: 100%; /* Cover the entire width of the viewport */
+  height: 100%; /* Cover the entire height of the viewport */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 9999;
+}
+
+.loading-content {
+  position: absolute;
+  top: 50%; /* Center the popup vertically */
+  left: 50%; /* Center the popup horizontally */
+  transform: translate(-50%, -50%); /* Center the popup exactly in the middle */
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.loading-content .spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #36f1c5fa;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+h5 {
+  background: linear-gradient(70deg, #000000fa, #000000fa, #000000fa);
+  -webkit-background-clip: text; 
+  background-clip: text;
+  color: transparent;
+  border-radius: 5px;
+}
+#imageContainer {
+  position: fixed;
+  top: 60px;
+  left: -320px;
+  display: flex;
+  height: 91vh;
+  border-radius: 0px 10px 10px 0px;
+  width: clamp(200px,330px,400px); 
+  z-index: 0;
+  background-color: rgba(255, 255, 255, 1); 
+  /* backdrop-filter: blur(10px); */
+  flex-direction: row;
+  transition: transform 0.7s ease-in-out;
+  border:none;
+  flex-wrap: wrap;
+  overflow: auto;
+}
+
+.image-visible {
+  left: 0px;
+  transform: translateX(377px); 
+  border: 1px solid black;
+ 
+}
+
+
+.renderImages {
+  width: 80px;
+  height: 80px;
+  border: 2px solid rgb(76, 76, 76);
+  margin: 15px; 
+  
+
+}
+.imageTitle{
+  width: 100%;
+  padding-left: 20px;
+  margin-right:10px;
+}
+
+.popupImageContainer {
+  position: fixed;
+  z-index: 99;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 50%;
+  max-height: 80%;
+  padding: 10px;
+  border: 1px solid #feffff;
+  border-radius: 20px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5); 
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); 
+}
+.popupImageContainer img {
+  object-fit: contain;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.close {
+  position: absolute; /* Position relative to the viewport */
+  top: 15px;
+  right: 25px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  z-index: 100; /* Set a higher z-index to ensure it appears on top */
+}
+.close:hover{
+  color: rgba(0, 0, 0, 1);
+
+}
+
+
+
+
+#documentListContainer {
+  position: fixed;
+  top: 60px;
+  left: -290px;
+  display: flex;
+  height: 91vh;
+  width: clamp(210px,300px,400px); 
+  border-radius: 0px 10px 10px 0px;
+  z-index:0;
+  background-color: rgba(255, 255, 255, 1); 
+  /* backdrop-filter: blur(10px); */
+  flex-direction: row;
+  transition: transform 0.7s ease-in-out;
+  border: none ;
+  flex-wrap: wrap;
+  overflow: auto;
+}
+.docs-visible {
+  left: 0px;
+  transform: translateX(347px); 
+  border: 1px solid black;
+ 
+}
+
+.docs-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-row {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  margin-bottom: 8px; 
+  margin-left: 5px;
+}
+

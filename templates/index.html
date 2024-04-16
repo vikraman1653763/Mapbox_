@@ -1,0 +1,33 @@
+{% extends 'lbody.html' %}
+
+{% block title %} Nevar-Systems {% endblock %}
+
+
+{% block body %}
+
+<h1> NEVAR-Systems </h1>
+
+<h4> Home Content  Here </h4>
+<script>
+function activateGeoServer() {
+    // Make an AJAX request to the Flask route that starts GeoServer
+    fetch('/start_geoserver')
+        .then(response => {
+            if (response.ok) {
+                console.log('GeoServer started successfully.');
+            } else {
+                console.error('Failed to start GeoServer.');
+            }
+        })
+        .catch(error => {
+            console.error('Error starting GeoServer:', error);
+        });
+}
+
+// Call the function to activate GeoServer when the webpage loads
+window.onload = function() {
+    activateGeoServer();
+};
+</script>
+
+{% endblock %}

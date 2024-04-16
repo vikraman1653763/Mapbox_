@@ -1,0 +1,80 @@
+    
+.project_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+
+.project_container .card {
+    width: calc(25% - 12px);
+
+  }
+  
+.project_container .card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+.project_container .card-footer {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+
+.login-container{
+
+    position: fixed;
+    width: 100%;
+
+    background-image: url('/static/images/greece-drones.webp') ;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+
+.login-container img {
+    filter: invert(100%);
+}
+
+.login-container .card{
+
+    background-size: cover;
+    background-position: center
+
+}
+
+
+iframe {
+
+    position: fixed;
+    width: 100%;
+    min-height: 100%;
+  }
+nav{
+  padding-bottom: 20px;
+}
+@media (max-width: 1200px){
+
+  .project_container .card {
+    width: calc(33.3% - 1%);
+
+  }
+} 
+
+@media (max-width: 1100px) {
+
+  .project_container .card {
+    width: calc(50% - 1%);
+  }
+} 
+
+@media (max-width: 600px) {
+
+  .project_container .card {
+    width: calc(100% - 5px);
+  }
+
+}
