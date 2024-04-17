@@ -12,7 +12,7 @@ function toggleImageSlide(projectId) {
                 // Check if the response contains any images
                 if (response && response.images) {
                     // Prepend the heading "Images" inside the image container
-                    $('#imageContainer').html('<h2 class="imageTitle">Images</h2>');
+                    $('#imageContainer').html('<h2 class="imageTitle titleName">Images</h2>');
 
                     // Iterate through the images and append them to the image container
                     response.images.forEach(function(imagePath) {
@@ -28,12 +28,12 @@ function toggleImageSlide(projectId) {
                     });
                 } else {
                     // If no images found, display a message
-                    $('#imageContainer').html('<h2>Images</h2>No images found.');
+                    $('#imageContainer').html('<h2 class="titleName">Images</h2>No images found.');
                 }
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching images:', error);
-                $('#imageContainer').html('<h2>Images</h2>Error fetching images. Please try again later.');
+                $('#imageContainer').html('<h2 class="titleName" >Images</h2>Error fetching images. Please try again later.');
             }
         });
     });
@@ -90,7 +90,7 @@ function toggleDocSlide(projectId) {
                         
                     });
                     var documentContent = $('<div>')
-                        .append('<h2 class="imageTitle">Documents</h2>')
+                        .append('<h2 class="titleName">Documents</h2>')
                         .append(docsListContainer);
                     // Append the container with the list of document names and download links to the document container
                     $('#documentListContainer').html(documentContent);

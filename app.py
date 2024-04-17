@@ -165,22 +165,16 @@ def handle_document_upload(documents, pro):
 @app.route('/status/project/<int:id>', methods=('GET', 'POST'))
 @login_required
 @admin_required
-def add_layer(id):
+def add_data(id):
     pro = Project.query.get_or_404(id)
     folder_data = File.query.filter_by(project_id=pro.id).all()
-    layers = GeoJSONFile.query.all()
+    layers = GeoJSONFile.query.filter_by(project_id=pro.id).all()
 
     if request.method == 'POST':
-        selected_ids = request.form.getlist('checkbox')
-        data = [Data(name=item, project_id=pro.id) for item in selected_ids]
-        db.session.add_all(data)
-        db.session.commit()
-        flash("Layer Added to the Project", "success")
         
         if 'folder_upload' in request.files:
             folder = request.files.getlist('folder_upload')
             first_file_path = folder[0].filename
-           
             folder_name = os.path.dirname(first_file_path)
             handle_folder_upload(folder, folder_name, pro)
             return redirect(request.referrer)
@@ -188,53 +182,30 @@ def add_layer(id):
             documents = request.files.getlist('document_upload')
             if documents[0].filename:  # Check if at least one document is uploaded
                 handle_document_upload(documents, pro)
-                flash('Documents uploaded successfully', 'success')
                 return redirect(request.referrer)
             else:
                 flash('No documents were uploaded', 'info')
                 return redirect(request.referrer)
+            
+        if 'geojson_upload' in request.files:
+            geojson_file = request.files['geojson_upload']
+            name = request.form['name'].replace(' ', '_') 
+            color = request.form['combinedColor']
+            if geojson_file:
+                filename = geojson_file.filename
+                data = json.load(geojson_file)  # Load GeoJSON data from file
+                existing_file = GeoJSONFile.query.filter_by(name=name, project_id=pro.id).first()
+                if existing_file:
+                    flash('A layer with the same name already exists.', 'info')
+                else:
+                    new_file = GeoJSONFile(name=name, filename=filename, data=data, color=color, project_id=pro.id)
+                    db.session.add(new_file)
+                    db.session.commit()
+                    return redirect(request.referrer)
         return redirect(request.referrer)
-    return render_template("add_layer.html", user=pro.user, files=layers, existing=pro.data, folder_data=folder_data)
+    return render_template("add_layer.html",pro=pro, user=pro.user, files=layers, existing=pro.data, folder_data=folder_data)
 
 
-@app.route('/dashboard/application/<int:id>')
-@login_required
-def project(id):
-   
-    files = GeoJSONFile.query.all()
-    serialized_files = []
-    for file in files:
-        serialized_file = {
-            "id": file.id,
-            "name": file.name,
-            "filename": file.filename,
-            "data": file.data,
-            "color":file.color
-        }
-        serialized_files.append(serialized_file)
-
-           
-              
-                    
-         
-    return render_template("layout.html" , files=serialized_files,id=id)
-
-
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        name = request.form['name']
-        color = request.form['combinedColor']
-        if file:
-            filename = file.filename
-            data = json.load(file)  # Load GeoJSON data from file
-            new_file = GeoJSONFile(name=name, filename=filename, data=data, color=color)
-            db.session.add(new_file)
-            db.session.commit()
-            return redirect(request.referrer)
-
-    return redirect(request.referrer)
 
 @app.route('/users')
 @admin_required
@@ -278,6 +249,28 @@ def update(id):
     else:
         return render_template('update.html',RegisterForm=RegisterForm, user=name_to_update)
 
+@app.route('/dashboard/application/<int:id>')
+@login_required
+def project(id):
+    # Assuming you have a Project model with 'id' as the primary key
+    project = Project.query.get_or_404(id)
+   
+    # Filter files by project_id
+    files = GeoJSONFile.query.filter_by(project_id=id).all()
+    
+    serialized_files = []
+    for file in files:
+        serialized_file = {
+            "id": file.id,
+            "name": file.name,
+            "filename": file.filename,
+            "data": file.data,
+            "color": file.color
+        }
+        serialized_files.append(serialized_file)
+
+    return render_template("layout.html", files=serialized_files, id=id)
+
 
 @app.route('/delete/<int:id>', methods=('GET', 'POST'))
 @login_required
@@ -289,11 +282,9 @@ def delete(id):
         # Delete associated projects
         projects = Project.query.filter_by(user_id=user_to_delete.id).all()
         for project in projects:
-            # Delete associated map_data records
-            # Delete associated data records
             Data.query.filter_by(project_id=project.id).delete()
-            # Delete associated drawnpt records
-            # Delete the project itself
+            GeoJSONFile.query.filter_by(project_id=project.id).delete()
+            File.query.filter_by(project_id=project.id).delete() 
             db.session.delete(project)
 
         # Commit changes
@@ -320,7 +311,8 @@ def delete_project(id):
     if project:
         
         Data.query.filter_by(project_id=id).delete()
-        File.query.filter_by(project_id=id).delete()  # Delete related files
+        GeoJSONFile.query.filter_by(project_id=id).delete()
+        File.query.filter_by(project_id=id).delete() 
         db.session.delete(project)
         db.session.commit()
 
@@ -330,13 +322,20 @@ def delete_project(id):
         flash("Project Not Found", "info")
         return redirect(request.referrer)
 
+@app.route('/deletelayer/project/folder/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def delete_layer(id):
+    file = GeoJSONFile.query.get_or_404(id)
+    db.session.delete(file)
+    db.session.commit()
+    return redirect(request.referrer)
 
 @app.route('/delete/project/folder/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def delete_file(id):
     file = File.query.get_or_404(id)
-
     if file:
         try:
             # Delete the file from the directory
@@ -348,7 +347,7 @@ def delete_file(id):
 
         db.session.delete(file)
         db.session.commit()
-        flash("File Deleted", "error_msg")
+        flash("File Deleted", "error")
         return redirect(request.referrer)
     else:
         flash("File Not Found", "info")

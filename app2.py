@@ -76,12 +76,11 @@ def preview():
     return render_template('preview.html', files=serialized_files)
 
 @app.route('/delete/<int:id>', methods=['POST'])
-def delete_file(id):
+def delete_layer(id):
     file = GeoJSONFile.query.get_or_404(id)
     db.session.delete(file)
     db.session.commit()
     return redirect(url_for('index'))
-
 
 dev = True
 # dev = False
