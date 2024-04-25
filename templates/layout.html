@@ -167,7 +167,9 @@
                 minZoom: 4,
                 maxZoom: 18,
                 center: centerCoordinates,
-                projection: 'globe'
+                projection: 'globe',
+                attributionControl: false
+
             });
 
             // Add database layers
@@ -242,7 +244,6 @@
             // Add map controls
             map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
             map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-            
             
             const draw = new MapboxDraw({
                 displayControlsDefault: false,

@@ -4,7 +4,12 @@ body * {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
 }
+body {
+  overflow: hidden;
+}
+
 
     #map {
         position: absolute; 
@@ -13,6 +18,7 @@ body * {
         padding: 0%;
         z-index: 0;
         top: 0;
+        overflow: hidden;
     }
     
 
@@ -197,10 +203,10 @@ width: 30px;
         margin: 0px auto;
         word-wrap: anywhere;
         white-space: pre-wrap;
-        padding: 5px 30px 5px 31px;
+        padding: 5px 5px 5px 5px;
     width: auto ;
         border: none;
-        border-radius: 3px;
+        border-radius: 5px 0px 0px 0px;
         font-size: 12px;
         text-align: center;
         color: #222;

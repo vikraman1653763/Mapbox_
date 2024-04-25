@@ -19,14 +19,7 @@ from werkzeug.utils import secure_filename
 import os
 import json
 import shutil
-# TODO: 
-    # - ADD PASSWORD VIEW BUTTON
-
-    # - work in ortho 
-    # - delete workspace if user is deleted
-
-
-
+from Deletion import delete , delete_project ,delete_layer ,delete_file , delete_all_files
 
 
 ADMIN = 2
@@ -270,111 +263,6 @@ def project(id):
         serialized_files.append(serialized_file)
 
     return render_template("layout.html", files=serialized_files, id=id)
-
-
-@app.route('/delete/<int:id>', methods=('GET', 'POST'))
-@login_required
-@admin_required
-def delete(id):
-    user_to_delete = User.query.get_or_404(id)
-
-    if user_to_delete:
-        # Delete associated projects
-        projects = Project.query.filter_by(user_id=user_to_delete.id).all()
-        for project in projects:
-            Data.query.filter_by(project_id=project.id).delete()
-            GeoJSONFile.query.filter_by(project_id=project.id).delete()
-            File.query.filter_by(project_id=project.id).delete() 
-            db.session.delete(project)
-
-        # Commit changes
-        db.session.commit()
-
-        # Delete the user
-        db.session.delete(user_to_delete)
-        db.session.commit()
-
-        flash("User and associated data deleted successfully", "info")
-        return redirect(url_for('users'))
-
-    else:
-        flash("User Not Found", "error")
-        return redirect(request.referrer)
-          
-
-@app.route('/delete/project/<int:id>', methods=('GET','POST'))
-@login_required
-@admin_required
-def delete_project(id):
-    project = Project.query.get_or_404(id)
-
-    if project:
-        
-        Data.query.filter_by(project_id=id).delete()
-        GeoJSONFile.query.filter_by(project_id=id).delete()
-        File.query.filter_by(project_id=id).delete() 
-        db.session.delete(project)
-        db.session.commit()
-
-        flash("Project Deleted", "error")
-        return redirect(request.referrer)
-    else:
-        flash("Project Not Found", "info")
-        return redirect(request.referrer)
-
-@app.route('/deletelayer/project/folder/<int:id>', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def delete_layer(id):
-    file = GeoJSONFile.query.get_or_404(id)
-    db.session.delete(file)
-    db.session.commit()
-    return redirect(request.referrer)
-
-@app.route('/delete/project/folder/<int:id>', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def delete_file(id):
-    file = File.query.get_or_404(id)
-    if file:
-        try:
-            # Delete the file from the directory
-            os.remove(os.path.join('static', file.path))
-
-        except FileNotFoundError:
-            # Handle case where file is not found
-            pass
-
-        db.session.delete(file)
-        db.session.commit()
-        flash("File Deleted", "error")
-        return redirect(request.referrer)
-    else:
-        flash("File Not Found", "info")
-        return redirect(request.referrer)
-    
-@app.route('/delete_all_files/<int:project_id>/<type>', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def delete_all_files(project_id, type):
-    # Get all files in the folder
-    files_to_delete = File.query.filter_by(project_id=project_id, type=type).all()
-
-    # Delete each file and remove from directory
-    for file in files_to_delete:
-        try:
-            # Delete the file from the directory
-            os.remove(os.path.join('static', file.path))
-        except FileNotFoundError:
-            # Handle case where file is not found
-            pass
-        db.session.delete(file)
-
-    # Commit changes after deleting all files
-    db.session.commit()
-
-    flash("All files deleted successfully", "success")
-    return redirect(request.referrer)
 
 
 @app.route('/get-images/<int:project_id>', methods=['GET'])
