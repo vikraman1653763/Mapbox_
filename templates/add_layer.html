@@ -31,17 +31,20 @@
                 <label for="geojson_upload">GeoJSON File:</label>
                 <input type="file" name="geojson_upload" id="geojson_upload" accept=".geojson" class="form-control-file" required>
             </div>
-            <div class="form-group mb-3">
-                <label for="color">Color:</label>
+            <div class="form-group mb-3" style="display: flex; align-items: center;">
+              <div style="flex: 1;">
                 <div id="colorPickerContainer">
-                    <input type="color" id="colorInput" name="color" value="#000000" class="form-control">
-                </div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="opacity">Opacity:</label>
-                <input type="range" id="opacitySlider" name="opacity" min="0" max="1" step="0.01" value="1" class="form-control-range">
-                <span id="opacityValue">1</span>
-            </div>
+                    <label for="color">Color:</label>
+                      <input type="color" id="colorInput" name="color" value="#ffffff" class="form-control">
+                  </div>
+              </div>
+              <div style="flex: 1;">
+                  <label for="opacity">Opacity:</label>
+                  <input type="range" id="opacitySlider" name="opacity" min="0" max="1" step="0.01" value="1" class="form-control-range">
+                  <span id="opacityValue">1</span>
+              </div>
+          </div>
+          
             <input type="hidden" id="combinedColor" name="combinedColor">
             <div class="form-group mb-3">
                 <label for="colorPreview">Color Preview:</label>
@@ -341,7 +344,7 @@ const colorPreview = document.getElementById('colorPreview');
   }
   .headBtn:focus {
     letter-spacing: 0.1em;
-    background:#4cbdc8;
+    background:#06b5ed;
     border-radius:10px;
     border:none;
   }
@@ -355,7 +358,7 @@ const colorPreview = document.getElementById('colorPreview');
         
     }
     .title{
-        background:#4cbdc8;
+        background:#06b5ed;
         border-radius:10px;
         padding:10px;
         
@@ -516,7 +519,13 @@ const colorPreview = document.getElementById('colorPreview');
       border: 1px solid #000;
       border-radius:20px;
   }
-      
+  
+  #colorInput{
+    width : 60%;
+    border-radius:30px;
+   
+  
+  }
       
 </style>
 {% endblock %}

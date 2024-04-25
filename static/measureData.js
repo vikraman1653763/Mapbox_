@@ -14,7 +14,7 @@ function measureData() {
         } else if (feature.geometry.type === 'LineString') {
             const distance = turf.length(feature);
             const roundedDistance = Math.round(distance * 100) / 100;
-            htmlContent = `<p><strong>Distance:</strong> ${roundedDistance} meters</p>`;
+            htmlContent = `<p><strong>Distance:</strong> ${roundedDistance} kilometers</p>`;
        } else if (feature.geometry.type === 'Point') {
             const lng = feature.geometry.coordinates[0].toFixed(6);
             const lat = feature.geometry.coordinates[1].toFixed(6);

@@ -1,5 +1,4 @@
 function centreLatLong(data) {
-   console.log(data.features[0].geometry.type);
             const defaultCoordinates = [79.846848,12.016219 ]; // Default coordinates
 
             let centerCoordinates = defaultCoordinates;
@@ -26,7 +25,6 @@ function centreLatLong(data) {
                 const coordinates = data.features[0].geometry.coordinates;
                 const long = coordinates[1];
                 const lat = coordinates[0];
-                console.log(lat, long);
                 centerCoordinates = [lat, long];
                 return centerCoordinates;
 

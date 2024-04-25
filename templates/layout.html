@@ -11,14 +11,16 @@
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}" type="text/css">
         <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.3/mapbox-gl-draw.css" type="text/css">
-        <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
+        <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@turf/turf/turf.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/ol@6.8.0/dist/ol.js"></script>
-        <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
         <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.3/mapbox-gl-draw.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
     </head>
     <body>
         <div class=" allButtonBar">
@@ -32,13 +34,16 @@
                 <span class="maintip ">exit</span>
             </button>
         </div>
-        
-        <div id="map"></div>
+
+        <div id="comparison-container">
+            <div id="after" class="map"></div>
+            <div id="map" class="map"></div>
+        </div>
         <pre  id="info"></pre>
-        
-        
-        <button title="Feature" class='feature' id="toggleFeatureInfo">ℹ️</button>
-        
+        <div class='toolBtn'>
+            <button title="Feature" class='feature' id="toggleFeatureInfo">ℹ️</button>
+            <button title="Compare" id="toggleCompare" class="compareButton"><img src="/static/resources/images/compare.svg" alt="compare"/></button>
+        </div>
         <div class="calculation-box">
             <div id="calculated-area"></div>
         </div>
@@ -46,40 +51,19 @@
             <label title="satellite" for="satellite" class="label">
                 <input id="satellite" name="page" type="radio"  value="satellite-v9" checked/>
                 <svg fill="inherit" width="16" height="20" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                    
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                    
-                    <g id="SVGRepo_iconCarrier"> <path d="M32.032 16c0-8.501-6.677-15.472-15.072-15.969-0.173-0.019-0.346-0.032-0.523-0.032-0.052 0-0.104 0.005-0.156 0.007-0.093-0.002-0.186-0.007-0.281-0.007-8.84 0-16.032 7.178-16.032 16.001s7.192 16.001 16.032 16.001c0.094 0 0.188-0.006 0.281-0.008 0.052 0.002 0.104 0.008 0.156 0.008 0.176 0 0.349-0.012 0.523-0.032 8.395-0.497 15.072-7.468 15.072-15.969zM29.049 21.151c-0.551-0.16-1.935-0.507-4.377-0.794 0.202-1.381 0.313-2.84 0.313-4.357 0-1.196-0.069-2.354-0.197-3.469 3.094-0.37 4.45-0.835 4.54-0.867l-0.372-1.050c0.695 1.659 1.080 3.478 1.080 5.386 0 1.818-0.352 3.555-0.987 5.151zM8.921 16c0-1.119 0.074-2.212 0.21-3.263 1.621 0.127 3.561 0.222 5.839 0.243v6.939c-2.219 0.021-4.114 0.111-5.709 0.234-0.22-1.319-0.34-2.715-0.34-4.154zM16.967 2.132c2.452 0.711 4.552 4.115 5.492 8.628-1.512 0.12-3.332 0.209-5.492 0.229v-8.857zM14.971 2.156v8.832c-2.136-0.021-3.965-0.109-5.502-0.226 0.96-4.457 3.076-7.836 5.502-8.606zM14.971 21.913l0 7.929c-2.263-0.718-4.256-3.705-5.293-7.719 1.492-0.11 3.253-0.189 5.292-0.21zM16.967 29.868l-0-7.955c2.061 0.020 3.814 0.102 5.288 0.217-1.019 4.067-3 7.076-5.288 7.738zM16.967 19.92l0-6.939c2.291-0.021 4.218-0.118 5.818-0.25 0.131 1.053 0.203 2.147 0.203 3.268 0 1.442-0.116 2.84-0.329 4.16-1.575-0.128-3.462-0.219-5.692-0.24zM28.588 9.81c-0.302 0.094-1.564 0.453-4.094 0.751-0.564-2.998-1.584-5.561-2.91-7.412 3.048 1.325 5.535 3.697 7.005 6.661zM11.213 2.831c-1.632 1.873-2.963 4.568-3.691 7.754-2.265-0.245-3.623-0.534-4.166-0.665 1.585-3.27 4.407-5.836 7.856-7.088zM2.614 11.787c0.385 0.104 1.841 0.467 4.549 0.766-0.155 1.107-0.24 2.26-0.24 3.447 0 1.509 0.136 2.96 0.383 4.334-2.325 0.251-3.755 0.552-4.396 0.706-0.607-1.566-0.944-3.264-0.944-5.041 0-1.467 0.228-2.883 0.649-4.213zM3.784 22.886c0.727-0.154 2.029-0.39 3.956-0.591 0.759 2.803 1.993 5.175 3.473 6.874-3.16-1.148-5.79-3.398-7.429-6.282v0zM21.583 28.849c1.195-1.665 2.14-3.907 2.728-6.525 1.982 0.227 3.226 0.494 3.853 0.652-1.5 2.596-3.808 4.669-6.581 5.873z"/> </g>
-                    
-                    </svg>        
-                </label> 
-                
-                <label title="light" for="light" class="label">
-                    <input id="light" name="page" type="radio" value="light-v11" />
-                    <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="inherit" stroke="inherit" stroke-width="0.00064">
-
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                        
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                        
-                        <g id="SVGRepo_iconCarrier"> <g> <circle fill-rule="evenodd" clip-rule="evenodd" fill="inherit" cx="32.003" cy="32.005" r="16.001"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M12.001,31.997c0-2.211-1.789-4-4-4H4c-2.211,0-4,1.789-4,4 s1.789,4,4,4h4C10.212,35.997,12.001,34.208,12.001,31.997z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M12.204,46.139l-2.832,2.833c-1.563,1.562-1.563,4.094,0,5.656 c1.562,1.562,4.094,1.562,5.657,0l2.833-2.832c1.562-1.562,1.562-4.095,0-5.657C16.298,44.576,13.767,44.576,12.204,46.139z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M32.003,51.999c-2.211,0-4,1.789-4,4V60c0,2.211,1.789,4,4,4 s4-1.789,4-4l-0.004-4.001C36.003,53.788,34.21,51.999,32.003,51.999z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M51.798,46.143c-1.559-1.566-4.091-1.566-5.653-0.004 s-1.562,4.095,0,5.657l2.829,2.828c1.562,1.57,4.094,1.562,5.656,0s1.566-4.09,0-5.656L51.798,46.143z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M60.006,27.997l-4.009,0.008 c-2.203-0.008-3.992,1.781-3.992,3.992c-0.008,2.211,1.789,4,3.992,4h4.001c2.219,0.008,4-1.789,4-4 C64.002,29.79,62.217,27.997,60.006,27.997z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M51.798,17.859l2.828-2.829c1.574-1.566,1.562-4.094,0-5.657 c-1.559-1.567-4.09-1.567-5.652-0.004l-2.829,2.836c-1.562,1.555-1.562,4.086,0,5.649C47.699,19.426,50.239,19.418,51.798,17.859z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M32.003,11.995c2.207,0.016,4-1.789,4-3.992v-4 c0-2.219-1.789-4-4-4c-2.211-0.008-4,1.781-4,3.993l0.008,4.008C28.003,10.206,29.792,11.995,32.003,11.995z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M12.212,17.855c1.555,1.562,4.079,1.562,5.646-0.004 c1.574-1.551,1.566-4.09,0.008-5.649l-2.829-2.828c-1.57-1.571-4.094-1.559-5.657,0c-1.575,1.559-1.575,4.09-0.012,5.653 L12.212,17.855z"/> </g> </g>
-                        
-                        </svg>
-                            </label>
-                    
-                <label title="dark" for="dark" class="label">
-                    <input id="dark" name="page" type="radio" value="dark-v11" />
-                    <svg width="64px" height="64px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)">
-        
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                        
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                        
-                        <g id="SVGRepo_iconCarrier"> <path d="M19.9001 2.30719C19.7392 1.8976 19.1616 1.8976 19.0007 2.30719L18.5703 3.40247C18.5212 3.52752 18.4226 3.62651 18.298 3.67583L17.2067 4.1078C16.7986 4.26934 16.7986 4.849 17.2067 5.01054L18.298 5.44252C18.4226 5.49184 18.5212 5.59082 18.5703 5.71587L19.0007 6.81115C19.1616 7.22074 19.7392 7.22074 19.9001 6.81116L20.3305 5.71587C20.3796 5.59082 20.4782 5.49184 20.6028 5.44252L21.6941 5.01054C22.1022 4.849 22.1022 4.26934 21.6941 4.1078L20.6028 3.67583C20.4782 3.62651 20.3796 3.52752 20.3305 3.40247L19.9001 2.30719Z" fill="inherit"/> <path d="M16.0328 8.12967C15.8718 7.72009 15.2943 7.72009 15.1333 8.12967L14.9764 8.52902C14.9273 8.65407 14.8287 8.75305 14.7041 8.80237L14.3062 8.95987C13.8981 9.12141 13.8981 9.70107 14.3062 9.86261L14.7041 10.0201C14.8287 10.0694 14.9273 10.1684 14.9764 10.2935L15.1333 10.6928C15.2943 11.1024 15.8718 11.1024 16.0328 10.6928L16.1897 10.2935C16.2388 10.1684 16.3374 10.0694 16.462 10.0201L16.8599 9.86261C17.268 9.70107 17.268 9.12141 16.8599 8.95987L16.462 8.80237C16.3374 8.75305 16.2388 8.65407 16.1897 8.52902L16.0328 8.12967Z" fill="inherit"/> <path d="M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8568C19.9289 13.7406 17.8615 15 15.5 15C11.9101 15 9 12.0899 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="inherit"/> </g>
-                        
-                        </svg>
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"/><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/><g id="SVGRepo_iconCarrier"> <path d="M32.032 16c0-8.501-6.677-15.472-15.072-15.969-0.173-0.019-0.346-0.032-0.523-0.032-0.052 0-0.104 0.005-0.156 0.007-0.093-0.002-0.186-0.007-0.281-0.007-8.84 0-16.032 7.178-16.032 16.001s7.192 16.001 16.032 16.001c0.094 0 0.188-0.006 0.281-0.008 0.052 0.002 0.104 0.008 0.156 0.008 0.176 0 0.349-0.012 0.523-0.032 8.395-0.497 15.072-7.468 15.072-15.969zM29.049 21.151c-0.551-0.16-1.935-0.507-4.377-0.794 0.202-1.381 0.313-2.84 0.313-4.357 0-1.196-0.069-2.354-0.197-3.469 3.094-0.37 4.45-0.835 4.54-0.867l-0.372-1.050c0.695 1.659 1.080 3.478 1.080 5.386 0 1.818-0.352 3.555-0.987 5.151zM8.921 16c0-1.119 0.074-2.212 0.21-3.263 1.621 0.127 3.561 0.222 5.839 0.243v6.939c-2.219 0.021-4.114 0.111-5.709 0.234-0.22-1.319-0.34-2.715-0.34-4.154zM16.967 2.132c2.452 0.711 4.552 4.115 5.492 8.628-1.512 0.12-3.332 0.209-5.492 0.229v-8.857zM14.971 2.156v8.832c-2.136-0.021-3.965-0.109-5.502-0.226 0.96-4.457 3.076-7.836 5.502-8.606zM14.971 21.913l0 7.929c-2.263-0.718-4.256-3.705-5.293-7.719 1.492-0.11 3.253-0.189 5.292-0.21zM16.967 29.868l-0-7.955c2.061 0.020 3.814 0.102 5.288 0.217-1.019 4.067-3 7.076-5.288 7.738zM16.967 19.92l0-6.939c2.291-0.021 4.218-0.118 5.818-0.25 0.131 1.053 0.203 2.147 0.203 3.268 0 1.442-0.116 2.84-0.329 4.16-1.575-0.128-3.462-0.219-5.692-0.24zM28.588 9.81c-0.302 0.094-1.564 0.453-4.094 0.751-0.564-2.998-1.584-5.561-2.91-7.412 3.048 1.325 5.535 3.697 7.005 6.661zM11.213 2.831c-1.632 1.873-2.963 4.568-3.691 7.754-2.265-0.245-3.623-0.534-4.166-0.665 1.585-3.27 4.407-5.836 7.856-7.088zM2.614 11.787c0.385 0.104 1.841 0.467 4.549 0.766-0.155 1.107-0.24 2.26-0.24 3.447 0 1.509 0.136 2.96 0.383 4.334-2.325 0.251-3.755 0.552-4.396 0.706-0.607-1.566-0.944-3.264-0.944-5.041 0-1.467 0.228-2.883 0.649-4.213zM3.784 22.886c0.727-0.154 2.029-0.39 3.956-0.591 0.759 2.803 1.993 5.175 3.473 6.874-3.16-1.148-5.79-3.398-7.429-6.282v0zM21.583 28.849c1.195-1.665 2.14-3.907 2.728-6.525 1.982 0.227 3.226 0.494 3.853 0.652-1.5 2.596-3.808 4.669-6.581 5.873z"/> </g>
+                </svg>        
+            </label> 
+            <label title="light" for="light" class="label">
+                <input id="light" name="page" type="radio" value="light-v11" />
+                <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="inherit" stroke="inherit" stroke-width="0.00064"><g id="SVGRepo_bgCarrier" stroke-width="0"/><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/><g id="SVGRepo_iconCarrier"> <g> <circle fill-rule="evenodd" clip-rule="evenodd" fill="inherit" cx="32.003" cy="32.005" r="16.001"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M12.001,31.997c0-2.211-1.789-4-4-4H4c-2.211,0-4,1.789-4,4 s1.789,4,4,4h4C10.212,35.997,12.001,34.208,12.001,31.997z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M12.204,46.139l-2.832,2.833c-1.563,1.562-1.563,4.094,0,5.656 c1.562,1.562,4.094,1.562,5.657,0l2.833-2.832c1.562-1.562,1.562-4.095,0-5.657C16.298,44.576,13.767,44.576,12.204,46.139z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M32.003,51.999c-2.211,0-4,1.789-4,4V60c0,2.211,1.789,4,4,4 s4-1.789,4-4l-0.004-4.001C36.003,53.788,34.21,51.999,32.003,51.999z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M51.798,46.143c-1.559-1.566-4.091-1.566-5.653-0.004 s-1.562,4.095,0,5.657l2.829,2.828c1.562,1.57,4.094,1.562,5.656,0s1.566-4.09,0-5.656L51.798,46.143z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M60.006,27.997l-4.009,0.008 c-2.203-0.008-3.992,1.781-3.992,3.992c-0.008,2.211,1.789,4,3.992,4h4.001c2.219,0.008,4-1.789,4-4 C64.002,29.79,62.217,27.997,60.006,27.997z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M51.798,17.859l2.828-2.829c1.574-1.566,1.562-4.094,0-5.657 c-1.559-1.567-4.09-1.567-5.652-0.004l-2.829,2.836c-1.562,1.555-1.562,4.086,0,5.649C47.699,19.426,50.239,19.418,51.798,17.859z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M32.003,11.995c2.207,0.016,4-1.789,4-3.992v-4 c0-2.219-1.789-4-4-4c-2.211-0.008-4,1.781-4,3.993l0.008,4.008C28.003,10.206,29.792,11.995,32.003,11.995z"/> <path fill-rule="evenodd" clip-rule="evenodd" fill="inherit" d="M12.212,17.855c1.555,1.562,4.079,1.562,5.646-0.004 c1.574-1.551,1.566-4.09,0.008-5.649l-2.829-2.828c-1.57-1.571-4.094-1.559-5.657,0c-1.575,1.559-1.575,4.09-0.012,5.653 L12.212,17.855z"/> </g> </g>
+                </svg>
+            </label>
+            <label title="dark" for="dark" class="label">
+                <input id="dark" name="page" type="radio" value="dark-v11" />
+                <svg width="64px" height="64px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"/><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/><g id="SVGRepo_iconCarrier"> <path d="M19.9001 2.30719C19.7392 1.8976 19.1616 1.8976 19.0007 2.30719L18.5703 3.40247C18.5212 3.52752 18.4226 3.62651 18.298 3.67583L17.2067 4.1078C16.7986 4.26934 16.7986 4.849 17.2067 5.01054L18.298 5.44252C18.4226 5.49184 18.5212 5.59082 18.5703 5.71587L19.0007 6.81115C19.1616 7.22074 19.7392 7.22074 19.9001 6.81116L20.3305 5.71587C20.3796 5.59082 20.4782 5.49184 20.6028 5.44252L21.6941 5.01054C22.1022 4.849 22.1022 4.26934 21.6941 4.1078L20.6028 3.67583C20.4782 3.62651 20.3796 3.52752 20.3305 3.40247L19.9001 2.30719Z" fill="inherit"/> <path d="M16.0328 8.12967C15.8718 7.72009 15.2943 7.72009 15.1333 8.12967L14.9764 8.52902C14.9273 8.65407 14.8287 8.75305 14.7041 8.80237L14.3062 8.95987C13.8981 9.12141 13.8981 9.70107 14.3062 9.86261L14.7041 10.0201C14.8287 10.0694 14.9273 10.1684 14.9764 10.2935L15.1333 10.6928C15.2943 11.1024 15.8718 11.1024 16.0328 10.6928L16.1897 10.2935C16.2388 10.1684 16.3374 10.0694 16.462 10.0201L16.8599 9.86261C17.268 9.70107 17.268 9.12141 16.8599 8.95987L16.462 8.80237C16.3374 8.75305 16.2388 8.65407 16.1897 8.52902L16.0328 8.12967Z" fill="inherit"/> <path d="M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8568C19.9289 13.7406 17.8615 15 15.5 15C11.9101 15 9 12.0899 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="inherit"/> </g>
+                </svg>
+            </label>
         </section>
         
         <div id="sidebar">
@@ -94,8 +78,18 @@
                     <input type="checkbox" id="dbLayer{{ file.id }}" class="layerToggleCheckbox" checked onchange="toggleLayerVisibility('{{ file.name }}', this.checked)" data-layer-name="{{ file.name }}">
                     <label for="dbLayer{{ file.id }}" class="layerToggleLabel"><div class="tick_mark"></div></label>
                     <span >{{ file.name }}</span>
+                    <br>
                 </div>
                 {% endfor %}
+
+                  <!--opacity slider-->
+
+        <div class="map-overlay top">
+            <div class="map-overlay-inner">
+                <label>Layer opacity: <span id="slider-value">100%</span></label>
+                <input id="slider" type="range" min="0" max="100" step="0" value="100">
+            </div>
+        </div>
             </div>
         </div>
     </div>     
@@ -110,12 +104,19 @@
             <img id="popupImage" src="" alt="Popup Image">
         </div>
 
+      <style>
+      
+        .map {position:absolute;top:0;bottom:0;width:100%;z-index:0;}
+      </style>
+
+        <!--sources-->
         <script src="/static/imageDocSlide.js"></script>
         <script src="/static/toggleSlide.js"></script>
         <script src="{{ url_for('static', filename='FeaturePopup.js') }}"></script>
         <script src="{{ url_for('static', filename='measureData.js') }}"></script>
         <script src="{{ url_for('static', filename='centreLatLong.js') }}"></script>
         <script src="{{ url_for('static', filename='toggleLayers.js') }}"></script>
+        <script src="{{ url_for('static', filename='compare.js') }}"></script>
         
         
         
@@ -125,7 +126,11 @@
             
             var dashboardUrl = "{{ url_for('dashboard') }}";
             var projectId={{ id }};
+
+            const slider = document.getElementById('slider');
+            const sliderValue = document.getElementById('slider-value');
             homeControl(dashboardUrl);
+            
             function homeControl(dashboardUrl) {
                 var homeButton = document.getElementById('homeButton');
                 homeButton.onclick = function() {
@@ -144,14 +149,27 @@
             const centerCoordinates = centreLatLong(firstData);
             // Define base layer separately
             const baseLayer = 'mapbox://styles/mapbox/satellite-v9';
+            
+            const afterMap = new mapboxgl.Map({
+                container: 'after',
+                style: baseLayer,
+                center: centerCoordinates,
+                zoom: 16,
+                minZoom:4,
+                maxZoom: 18,
+                projection: 'globe'
+
+            });
             const map = new mapboxgl.Map({
                 container: 'map',
                 style: baseLayer,
                 zoom: 16,
+                minZoom: 4,
+                maxZoom: 18,
                 center: centerCoordinates,
                 projection: 'globe'
             });
-            
+
             // Add database layers
             function renderLayer(files){
                 {% for layer in files %}
@@ -189,23 +207,36 @@
                     source: '{{ layer.name }}',
                     paint: paintProperties 
                 });
+
+                slider.addEventListener('input', (e) => {
+                    const geometryType = Data{{ layer.name }}.features[0].geometry.type.toLowerCase();
+                    if (geometryType === 'polygon') {
+                        map.setPaintProperty('{{layer.name}}', `fill-opacity`, parseInt(e.target.value, 10) / 100);
+                    } else if (geometryType === 'multilinestring') {
+                        map.setPaintProperty('{{layer.name}}', `line-opacity`, parseInt(e.target.value, 10) / 100);
+                    }else if (geometryType === 'point') {
+                        map.setPaintProperty('{{layer.name}}', `circle-opacity`, parseInt(e.target.value, 10) / 100);
+                    }
+                    sliderValue.textContent = `${e.target.value}%`;
+                });
                 {% endfor %}
             }  
             
+           
             
-            
-            
-            
+            //rendering the Map
             map.on('style.load', () => {
                 map.setFog({});
                 renderLayer(files);
+                compareButton.onclick = toggleMapComparison;
             });  
+
             // Add base layer toggle functionality
             document.querySelectorAll('input[name="page"]').forEach(function(radioButton) {
                 radioButton.addEventListener('change', function() {
                     const selectedStyle = this.value;
-                    console.log(selectedStyle);
                     map.setStyle('mapbox://styles/mapbox/' + selectedStyle);
+                    afterMap.setStyle('mapbox://styles/mapbox/' + selectedStyle);
                 });
             });
             // Add map controls
@@ -230,19 +261,10 @@
             
 
             map.on('mousemove', (e) => {
-                document.getElementById('info').innerHTML =
-                // Extracting lng and lat from e.lngLat object
-                "<b>Longitude:</b> " + e.lngLat.lng.toFixed(6) +
-                " " +
-                "<b>Latitude: </b>" + e.lngLat.lat.toFixed(6);
+                document.getElementById('info').innerHTML ="<b>Longitude:</b> " + e.lngLat.lng.toFixed(6) +" "+"<b>Latitude: </b>" + e.lngLat.lat.toFixed(6);
             });
-            
-            
             toggleSlide();
-            
         </script>
-        
-        
     </body>
 </html>
     
