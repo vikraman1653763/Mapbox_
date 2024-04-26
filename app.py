@@ -7,10 +7,6 @@ from webforms import loginForm, registerForm, projectName, changeUserPassword, s
 from functools import wraps 
 import requests
 from modeldb import User, admin_required,Project,Data,GeoJSONFile,db,login_manager,app,File
-from geoserver.catalog import Catalog
-import folium
-# from folium import plugins
-from folium.raster_layers import WmsTileLayer , ImageOverlay
 from portal import register, verify_otp,success,login,logout,changePassword
 import geopandas as gpd
 from sqlalchemy.ext.mutable import MutableDict
@@ -63,13 +59,10 @@ def status(id):
     ProjectName = projectName()
     user = User.query.get_or_404(id)
     projects = user.project
-
     if ProjectName.validate_on_submit():
         
         name_of_project = ProjectName.name.data
         ProjectName.name.data = ''
-
-
         p = Project(name=name_of_project, user_id=user.id)
         db.session.add(p)
         db.session.commit()

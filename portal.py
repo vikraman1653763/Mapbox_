@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 @app.route('/register' , methods=('GET' , 'POST'))
 def register():
+    
     if request.method == 'POST':
         error_message = request.form.get('errorMessage')
         flash(error_message, "error_msg")
@@ -26,20 +27,27 @@ def verify_otp():
         lastname = data.get('lastname')
         email = data.get('email')
         password = data.get('password')
+        existing_user = User.query.filter_by(email=email).first()
         
-        # Save user details to the database
+        if existing_user:
+            
+            flash("Email already registered", "error_msg")
+            return jsonify({'success': False, 'error': 'Email already registered'}), 409
+         
         new_user = User(username=username, lastname=lastname, email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
 
-        return jsonify({'success': True, 'message': 'User registered successfully'})
+        flash("User registered successfully", "success_msg")
+        return jsonify({'success': True}), 200
+
     except Exception as e:
-        print(e)
-        return jsonify({'success': False, 'error': 'Error saving user details'})
+        flash("Error saving user details", "error_msg")
+        return jsonify({'success': False, 'error': str(e)}), 500
     
-@app.route('/success')
+@app.route('/otp')
 def success():
-    return render_template('success.html')
+    return render_template('otp.html')
 
 @app.route('/logout' , methods=('GET' , 'POST'))
 @login_required

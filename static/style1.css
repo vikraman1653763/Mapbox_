@@ -75,7 +75,7 @@ width: 30px;
       border-bottom: 1px solid rgb(215, 213, 213);
     }
     .toolBtn{
-      
+      z-index: 1;
       position: fixed; 
       width: 29px;
      height: fit-content;
@@ -86,7 +86,7 @@ width: 30px;
       background-color: white;
       border-radius: 5px;
       bottom: 10px; 
-      top: 27%;
+      top: 28%;
       right: 10px;
       padding: 5px;
       transform: translateY(120%);
@@ -97,6 +97,7 @@ width: 30px;
         cursor: pointer;
     }
     .base{
+      
         position: fixed;
         top: 90%;
         right: 10px;
@@ -570,6 +571,7 @@ width: 30px;
 
   /*Base switch */
   section {
+    z-index: 1;
     --col-orange: #000000;
     --col-dark: #ffffff;
     --col-darkGray: #777779;

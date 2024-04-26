@@ -59,7 +59,7 @@ const validateInputs = () => {
         isValid = false;
     } else {
         setSuccess(username);
-        sessionStorage.setItem('username', usernameValue);
+        localStorage.setItem('username', usernameValue);
     }
 
     if (lastnameValue === '') {
@@ -70,7 +70,7 @@ const validateInputs = () => {
         isValid = false;
     } else {
         setSuccess(lastname);
-        sessionStorage.setItem('lastname',lastnameValue);
+        localStorage.setItem('lastname',lastnameValue);
 
     }
 
@@ -88,7 +88,7 @@ const validateInputs = () => {
         isValid = false;
     } else {
         setSuccess(email);
-        sessionStorage.setItem('email',emailValue);
+        localStorage.setItem('email',emailValue);
     }
 
     if (passwordValue === '') {
@@ -121,7 +121,7 @@ const validateInputs = () => {
         isValid = false;
     } else {
         setSuccess(password2);
-        sessionStorage.setItem('password', password2Value);
+        localStorage.setItem('password', password2Value);
     }
 
     if (!isValid && firstErrorMessage) {
@@ -146,11 +146,11 @@ function sendErrorMessage(errorMessage) {
     .then(response => {
         if (response.ok) {
             // Store input values in local storage before reloading
-            sessionStorage.setItem('username', username.value.trim());
-            sessionStorage.setItem('lastname', lastname.value.trim());
-            sessionStorage.setItem('email', email.value.trim());
-            sessionStorage.setItem('password', password.value.trim());
-            sessionStorage.setItem('password2', password2.value.trim());
+            localStorage.setItem('username', username.value.trim());
+            localStorage.setItem('lastname', lastname.value.trim());
+            localStorage.setItem('email', email.value.trim());
+            localStorage.setItem('password', password.value.trim());
+            localStorage.setItem('password2', password2.value.trim());
 
             // Reload the page after successfully sending the error message
             window.location.reload();
@@ -164,33 +164,28 @@ function sendErrorMessage(errorMessage) {
     });
 }
 
-// Function to populate input fields with values from local storage
-function populateInputFields() {
-    username.value = sessionStorage.getItem('username') || '';
-    lastname.value = sessionStorage.getItem('lastname') || '';
-    email.value = sessionStorage.getItem('email') || '';
-    password.value = sessionStorage.getItem('password') || '';
-    password2.value = sessionStorage.getItem('password2') || '';
-}
+
 
 // Call populateInputFields function to populate input fields after page reload
-populateInputFields();
-function setSessionStorageTimer() {
+
+function setlocalStorageTimer() {
     setTimeout(() => {
-        sessionStorage.clear();
-    }, 5000); // 5000 milliseconds = 5 seconds
+        console.log('Setting localStorage');
+        localStorage.clear();
+    }, 30000); // 30000 milliseconds = 30 seconds
 }
 form.addEventListener('submit', e => {
     e.preventDefault();
     const { isValid} = validateInputs();
     if (isValid && !otpSent) {
-        sendOTP();
+       
         otpSent = true;
-        setSessionStorageTimer(); 
+        setlocalStorageTimer(); 
     } 
 });
 
 // Clear local storage when form is submitted
 form.addEventListener('submit', () => {
-    sessionStorage.clear();
+    console.log('cleared');
+    localStorage.clear();
 });

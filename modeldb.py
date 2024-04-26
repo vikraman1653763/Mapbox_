@@ -36,9 +36,7 @@ class User(db.Model , UserMixin):
     
     project = db.relationship('Project', backref='user')
 
-    def __repr__(self):
-        return '<Name %%r>' % self.name
-
+    
 
 class Project(db.Model):
     
